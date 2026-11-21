@@ -1,1 +1,454 @@
+/* =========================================
+   WAITLESS - GLOBAL DESIGN SYSTEM
+   Tailwind CSS v4 + HeroUI v3
+========================================= */
+
+/* Google Fonts */
+@import url("https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+
+/* Framework Styles */
 @import "tailwindcss";
+@import "@heroui/styles";
+
+/* =========================================
+   1. BRAND COLORS & DESIGN TOKENS
+========================================= */
+
+:root {
+  /* Brand */
+  --wl-primary: #2563eb;
+  --wl-primary-dark: #1d4ed8;
+  --wl-primary-light: #e0f2fe;
+
+  --wl-secondary: #0d9488;
+  --wl-secondary-dark: #0f766e;
+  --wl-secondary-light: #f0fdfa;
+
+  /* Neutral */
+  --wl-navy: #102a43;
+  --wl-background: #f8fafc;
+  --wl-surface: #ffffff;
+
+  --wl-text: #334155;
+  --wl-heading: #102a43;
+  --wl-muted: #64748b;
+  --wl-border: #e2e8f0;
+  --wl-scrollbar: #cbd5e1;
+
+  /* Queue Status */
+  --wl-status-waiting: #2563eb;
+  --wl-status-called: #d97706;
+  --wl-status-serving: #0d9488;
+  --wl-status-completed: #16a34a;
+  --wl-status-skipped: #ea580c;
+  --wl-status-cancelled: #dc2626;
+  --wl-status-cancelled-bg: #fef2f2;
+  --wl-status-no-show: #64748b;
+
+  /* Typography */
+  --wl-font-english: "Plus Jakarta Sans", sans-serif;
+  --wl-font-bangla: "Hind Siliguri", sans-serif;
+
+  --wl-text-xs: 0.75rem;
+  --wl-text-sm: 0.875rem;
+  --wl-text-base: 1rem;
+  --wl-text-lg: 1.125rem;
+  --wl-text-xl: 1.25rem;
+  --wl-text-2xl: 1.5rem;
+  --wl-text-3xl: 1.875rem;
+  --wl-text-4xl: 2.25rem;
+  --wl-text-5xl: 3rem;
+
+  /* Font Weights */
+  --wl-weight-regular: 400;
+  --wl-weight-medium: 500;
+  --wl-weight-semibold: 600;
+  --wl-weight-bold: 700;
+  --wl-weight-extrabold: 800;
+
+  /* Spacing */
+  --wl-space-1: 0.25rem;
+  --wl-space-2: 0.5rem;
+  --wl-space-3: 0.75rem;
+  --wl-space-4: 1rem;
+  --wl-space-5: 1.25rem;
+  --wl-space-6: 1.5rem;
+  --wl-space-8: 2rem;
+  --wl-space-10: 2.5rem;
+  --wl-space-12: 3rem;
+  --wl-space-16: 4rem;
+  --wl-space-20: 5rem;
+  --wl-space-24: 6rem;
+
+  /* Border Radius */
+  --wl-radius-sm: 8px;
+  --wl-radius-md: 12px;
+  --wl-radius-lg: 16px;
+  --wl-radius-xl: 24px;
+  --wl-radius-full: 9999px;
+
+  /* Shadows */
+  --wl-shadow-sm: 0 1px 2px rgb(16 42 67 / 5%);
+  --wl-shadow-md: 0 4px 12px rgb(16 42 67 / 8%);
+  --wl-shadow-lg: 0 10px 30px rgb(16 42 67 / 10%);
+  --wl-shadow-xl: 0 20px 50px rgb(16 42 67 / 12%);
+
+  /* Transitions */
+  --wl-transition-fast: 150ms ease;
+  --wl-transition-normal: 250ms ease;
+  --wl-transition-slow: 400ms ease;
+
+  /* Layout */
+  --wl-container-width: 1280px;
+  --wl-header-height: 72px;
+
+  /* Z-index */
+  --wl-z-dropdown: 1000;
+  --wl-z-sticky: 1020;
+  --wl-z-modal: 1050;
+  --wl-z-toast: 1100;
+
+  /* HeroUI Semantic Theme Mapping */
+  --accent: var(--wl-primary);
+  --accent-foreground: #ffffff;
+
+  --background: var(--wl-background);
+  --foreground: var(--wl-heading);
+
+  --surface: var(--wl-surface);
+  --surface-foreground: var(--wl-text);
+
+  --muted: #f1f5f9;
+  --muted-foreground: var(--wl-muted);
+
+  --border: var(--wl-border);
+  --focus: var(--wl-primary);
+}
+
+/* =========================================
+   2. TAILWIND CSS v4 THEME MAPPING
+========================================= */
+
+@theme inline {
+  /* Brand Colors */
+  --color-primary: var(--wl-primary);
+  --color-primary-dark: var(--wl-primary-dark);
+  --color-primary-light: var(--wl-primary-light);
+
+  --color-secondary: var(--wl-secondary);
+  --color-secondary-dark: var(--wl-secondary-dark);
+  --color-secondary-light: var(--wl-secondary-light);
+
+  /* Neutral Colors */
+  --color-navy: var(--wl-navy);
+  --color-background: var(--wl-background);
+  --color-surface: var(--wl-surface);
+
+  --color-text: var(--wl-text);
+  --color-heading: var(--wl-heading);
+  --color-muted: var(--wl-muted);
+  --color-border: var(--wl-border);
+
+  /* Status Colors */
+  --color-waiting: var(--wl-status-waiting);
+  --color-called: var(--wl-status-called);
+  --color-serving: var(--wl-status-serving);
+  --color-completed: var(--wl-status-completed);
+  --color-skipped: var(--wl-status-skipped);
+  --color-cancelled: var(--wl-status-cancelled);
+  --color-cancelled-bg: var(--wl-status-cancelled-bg);
+  --color-no-show: var(--wl-status-no-show);
+
+  /* Fonts */
+  --font-sans: var(--wl-font-english);
+  --font-english: var(--wl-font-english);
+  --font-bangla: var(--wl-font-bangla);
+
+  /* Radius */
+  --radius-sm: var(--wl-radius-sm);
+  --radius-md: var(--wl-radius-md);
+  --radius-lg: var(--wl-radius-lg);
+  --radius-xl: var(--wl-radius-xl);
+  --radius-full: var(--wl-radius-full);
+
+  /* Shadows */
+  --shadow-soft: var(--wl-shadow-sm);
+  --shadow-card: var(--wl-shadow-md);
+  --shadow-elevated: var(--wl-shadow-lg);
+  --shadow-floating: var(--wl-shadow-xl);
+}
+
+/* =========================================
+   3. GLOBAL RESET
+========================================= */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--wl-header-height);
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: var(--wl-background);
+  color: var(--wl-text);
+  font-family: var(--wl-font-english);
+  font-size: var(--wl-text-base);
+  font-weight: var(--wl-weight-regular);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+body:lang(bn),
+[lang="bn"] {
+  font-family: var(--wl-font-bangla);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+img {
+  height: auto;
+}
+
+/* =========================================
+   4. GLOBAL TYPOGRAPHY
+========================================= */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--wl-heading);
+  font-family: var(--wl-font-english);
+  font-weight: var(--wl-weight-bold);
+  line-height: 1.25;
+}
+
+h1 {
+  font-size: var(--wl-text-5xl);
+}
+
+h2 {
+  font-size: var(--wl-text-4xl);
+}
+
+h3 {
+  font-size: var(--wl-text-3xl);
+}
+
+p {
+  color: var(--wl-text);
+}
+
+/* =========================================
+   5. REUSABLE GLOBAL UTILITIES
+========================================= */
+
+.wl-container {
+  width: min(100% - 2rem, var(--wl-container-width));
+  margin-inline: auto;
+}
+
+.wl-card {
+  background-color: var(--wl-surface);
+  border: 1px solid var(--wl-border);
+  border-radius: var(--wl-radius-lg);
+  box-shadow: var(--wl-shadow-sm);
+  transition: var(--wl-transition-normal);
+}
+
+.wl-card:hover {
+  box-shadow: var(--wl-shadow-md);
+}
+
+.wl-transition {
+  transition: var(--wl-transition-normal);
+}
+
+.wl-focus-ring:focus-visible {
+  outline: 3px solid var(--wl-primary-light);
+  outline-offset: 3px;
+}
+
+/* =========================================
+   6. SCROLLBAR
+========================================= */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--wl-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--wl-scrollbar);
+  border-radius: var(--wl-radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--wl-muted);
+}
+
+/* =========================================
+   7. ANIMATIONS
+========================================= */
+
+@keyframes wl-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes wl-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wl-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wl-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes wl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wl-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.wl-animate-fade-in {
+  animation: wl-fade-in 400ms ease both;
+}
+
+.wl-animate-slide-up {
+  animation: wl-slide-up 500ms ease both;
+}
+
+.wl-animate-slide-down {
+  animation: wl-slide-down 400ms ease both;
+}
+
+.wl-animate-pulse {
+  animation: wl-pulse 1.5s ease-in-out infinite;
+}
+
+.wl-animate-spin {
+  animation: wl-spin 1s linear infinite;
+}
+
+/* =========================================
+   8. ACCESSIBILITY
+========================================= */
+
+:focus-visible {
+  outline: 2px solid var(--wl-primary);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* =========================================
+   9. RESPONSIVE TYPOGRAPHY
+========================================= */
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: var(--wl-text-4xl);
+  }
+
+  h2 {
+    font-size: var(--wl-text-3xl);
+  }
+
+  h3 {
+    font-size: var(--wl-text-2xl);
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: var(--wl-text-3xl);
+  }
+
+  h2 {
+    font-size: var(--wl-text-2xl);
+  }
+}

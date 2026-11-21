@@ -1,9 +1,8 @@
-import React from 'react'
+
+import PageLoader from "./components/loaders/PageLoader";
 
 function App() {
-  return (
-    <div>Salman farshi</div>
-  )
+  return <PageLoader />;
 }
 
-export default App
+export default App;
