@@ -35,15 +35,24 @@
   --wl-border: #e2e8f0;
   --wl-scrollbar: #cbd5e1;
 
-  /* Queue Status */
+  /* Queue Status Colors */
   --wl-status-waiting: #2563eb;
   --wl-status-called: #d97706;
   --wl-status-serving: #0d9488;
   --wl-status-completed: #16a34a;
   --wl-status-skipped: #ea580c;
   --wl-status-cancelled: #dc2626;
-  --wl-status-cancelled-bg: #fef2f2;
   --wl-status-no-show: #64748b;
+
+  /* Queue Status Backgrounds */
+  --wl-status-waiting-bg: #e0f2fe;
+  --wl-status-called-bg: #fef3c7;
+  --wl-status-serving-bg: #f0fdfa;
+  --wl-status-completed-bg: #dcfce7;
+  --wl-status-skipped-bg: #ffedd5;
+  --wl-status-cancelled-bg: #fef2f2;
+  --wl-status-no-show-bg: #f1f5f9;
+  --wl-status-default-bg: #f8fafc;
 
   /* Typography */
   --wl-font-english: "Plus Jakarta Sans", sans-serif;
@@ -86,6 +95,7 @@
   --wl-radius-lg: 16px;
   --wl-radius-xl: 24px;
   --wl-radius-full: 9999px;
+  --wl-radius-pill: var(--wl-radius-full);
 
   /* Shadows */
   --wl-shadow-sm: 0 1px 2px rgb(16 42 67 / 5%);
@@ -156,8 +166,15 @@
   --color-completed: var(--wl-status-completed);
   --color-skipped: var(--wl-status-skipped);
   --color-cancelled: var(--wl-status-cancelled);
-  --color-cancelled-bg: var(--wl-status-cancelled-bg);
   --color-no-show: var(--wl-status-no-show);
+
+  --color-waiting-bg: var(--wl-status-waiting-bg);
+  --color-called-bg: var(--wl-status-called-bg);
+  --color-serving-bg: var(--wl-status-serving-bg);
+  --color-completed-bg: var(--wl-status-completed-bg);
+  --color-skipped-bg: var(--wl-status-skipped-bg);
+  --color-cancelled-bg: var(--wl-status-cancelled-bg);
+  --color-no-show-bg: var(--wl-status-no-show-bg);
 
   /* Fonts */
   --font-sans: var(--wl-font-english);
@@ -205,8 +222,7 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body:lang(bn),
-[lang="bn"] {
+:lang(bn) {
   font-family: var(--wl-font-bangla);
 }
 
@@ -277,7 +293,7 @@ p {
 ========================================= */
 
 .wl-container {
-  width: min(100% - 2rem, var(--wl-container-width));
+  width: min(calc(100% - var(--wl-space-8)), var(--wl-container-width));
   margin-inline: auto;
 }
 
@@ -386,7 +402,7 @@ p {
 }
 
 .wl-animate-fade-in {
-  animation: wl-fade-in 400ms ease both;
+  animation: wl-fade-in var(--wl-transition-slow) both;
 }
 
 .wl-animate-slide-up {
@@ -394,7 +410,7 @@ p {
 }
 
 .wl-animate-slide-down {
-  animation: wl-slide-down 400ms ease both;
+  animation: wl-slide-down var(--wl-transition-slow) both;
 }
 
 .wl-animate-pulse {
