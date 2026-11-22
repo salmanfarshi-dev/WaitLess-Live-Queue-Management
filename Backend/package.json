@@ -1,12 +1,19 @@
+
 {
-  "name": "backend",
+  "name": "waitless-backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
+  "description": "WaitLess - Smart Queue Management Platform Backend",
+ "main": "server.js",
+"scripts": {
+  "dev": "nodemon server.js",
+  "start": "node server.js"
+},
+  "keywords": [
+    "waitless",
+    "queue-management",
+    "healthcare",
+    "saas"
+  ],
   "author": "",
   "license": "ISC",
   "type": "commonjs",

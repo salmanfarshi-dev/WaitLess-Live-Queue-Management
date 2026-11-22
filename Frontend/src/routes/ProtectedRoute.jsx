@@ -1,12 +1,14 @@
+
 import { Navigate, Outlet, useLocation } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function ProtectedRoute({ allowedRoles = [] }) {
-  // Temporary authentication check.
-  // Later, this will come from Redux auth state.
-  const isAuthenticated = false;
-  const userRole = null;
+  const { isAuthenticated, user } = useSelector(
+    (state) => state.auth
+  );
 
   const location = useLocation();
+  const userRole = user?.role;
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace state={{ from: location }} />;

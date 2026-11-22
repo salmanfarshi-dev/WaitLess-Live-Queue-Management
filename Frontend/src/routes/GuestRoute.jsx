@@ -1,12 +1,15 @@
+
 import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function GuestRoute() {
-  // Temporary authentication check.
-  // Later, this will come from Redux auth state.
-  const isAuthenticated = false;
-  const userRole = "hospital_admin";
+  const { isAuthenticated, user } = useSelector(
+    (state) => state.auth
+  );
 
   if (isAuthenticated) {
+    const userRole = user?.role;
+
     if (userRole === "super_admin") {
       return <Navigate to="/super-admin/dashboard" replace />;
     }

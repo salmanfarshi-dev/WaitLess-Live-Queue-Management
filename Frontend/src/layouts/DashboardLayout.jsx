@@ -1,5 +1,7 @@
+
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import DashboardSidebar from "../components/common/DashboardSidebar";
 import DashboardHeader from "../components/common/DashboardHeader";
@@ -8,13 +10,24 @@ function DashboardLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  // Temporary role for UI development.
-  // Later, this will come from authenticated user data.
+  const userData = useSelector((state) => state.auth.user);
+
+  const roleLabels = {
+    super_admin: "Super Admin",
+    hospital_admin: "Hospital Admin",
+    receptionist: "Receptionist",
+    doctor: "Doctor",
+  };
+
   const user = {
-    name: "User Name",
-    role: "Hospital Admin",
-    roleKey: "hospital_admin",
-    avatar: "",
+    name:
+      userData?.name ||
+      userData?.fullName ||
+      userData?.email ||
+      "User",
+    role: roleLabels[userData?.role] || "User",
+    roleKey: userData?.role || "",
+    avatar: userData?.avatar || userData?.profileImage || "",
   };
 
   return (
