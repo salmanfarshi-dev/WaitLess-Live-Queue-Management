@@ -1,0 +1,22 @@
+
+{
+  "app": {
+    "name": "WaitLess",
+    "tagline": "Your Time Matters."
+  },
+  "common": {
+    "loading": "Loading...",
+    "search": "Search",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "next": "Next",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "tryAgain": "Try Again",
+    "noData": "No data found",
+    "somethingWentWrong": "Something went wrong"
+  }
+}
