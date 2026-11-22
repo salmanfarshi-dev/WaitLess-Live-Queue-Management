@@ -1,4 +1,5 @@
 import { motion } from "motion/react";
+import waitlessLogo from "../../assets/images/waitless-logo.png";
 
 function PageLoader({ message = "Preparing your experience..." }) {
   return (
@@ -15,7 +16,7 @@ function PageLoader({ message = "Preparing your experience..." }) {
       >
         {/* WaitLess Logo */}
         <motion.img
-          src="/src/assets/images/waitless-logo.png"
+          src={waitlessLogo}
           alt="WaitLess"
           className="mb-8 h-auto w-64 max-w-full object-contain sm:w-72"
           animate={{ opacity: [0.8, 1, 0.8] }}

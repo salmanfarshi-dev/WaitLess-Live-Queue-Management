@@ -1,81 +1,77 @@
-import { Link, NavLink } from "react-router-dom";
-import { FiMenu, FiX } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "motion/react";
+import { FiArrowUpRight, FiMenu, FiX, FiChevronRight } from "react-icons/fi";
+
 import AppLogo from "./AppLogo";
-import AppButton from "./AppButton";
 
 const navLinks = [
   { label: "Home", to: "/" },
   { label: "Hospitals", to: "/hospitals" },
   { label: "How It Works", to: "/how-it-works" },
-  { label: "About", to: "/about" },
+  { label: "About Us", to: "/about" },
   { label: "Contact", to: "/contact" },
 ];
 
 function PublicNavbar() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 15);
+    };
+
+    handleScroll();
+    window.addEventListener("scroll", handleScroll);
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = menuOpen ? "hidden" : "";
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [menuOpen]);
 
   const closeMenu = () => setMenuOpen(false);
 
+  const goToRegister = () => {
+    closeMenu();
+    navigate("/register");
+  };
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b border-border bg-surface">
-      <div className="wl-container flex min-h-16 items-center justify-between gap-4 py-3">
-        <AppLogo />
-
-        <nav className="hidden items-center gap-6 lg:flex">
-          {navLinks.map((link) => (
-            <NavLink
-              key={link.to}
-              to={link.to}
-              className={({ isActive }) =>
-                `text-sm font-semibold transition-colors ${
-                  isActive ? "text-primary" : "text-muted hover:text-primary"
-                }`
-              }
-            >
-              {link.label}
-            </NavLink>
-          ))}
-        </nav>
-
-        <div className="hidden items-center gap-3 lg:flex">
-          <Link
-            to="/login"
-            className="text-sm font-semibold text-text transition-colors hover:text-primary"
-          >
-            Login
-          </Link>
-
-          <AppButton onPress={() => window.location.assign("/register")}>
-            Get Started
-          </AppButton>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => setMenuOpen((previous) => !previous)}
-          className="flex h-10 w-10 items-center justify-center rounded-lg text-heading transition-colors hover:bg-background lg:hidden"
-          aria-label={menuOpen ? "Close menu" : "Open menu"}
-          aria-expanded={menuOpen}
-        >
-          {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
-        </button>
+    <header className="wl-public-header">
+      <div className="wl-announcement">
+        <span>YOUR TIME MATTERS</span>
+        <span className="mx-2">·</span>
+        Smarter queues. Better healthcare experiences.
       </div>
 
-      {menuOpen && (
-        <div className="border-t border-border bg-surface px-4 py-4 lg:hidden">
-          <nav className="flex flex-col gap-1">
+      <div className={`wl-navbar ${scrolled ? "is-scrolled" : ""}`}>
+        <div className="wl-navbar-inner">
+          {/* Brand */}
+          <Link to="/" className="wl-brand" aria-label="WaitLess Home">
+            <AppLogo size="lg" />
+            <span className="wl-brand-copy">
+              <span className="wl-brand-tagline">Less Waiting. More Care.</span>
+            </span>
+          </Link>
+
+          {/* Desktop Navigation */}
+          <nav className="wl-nav-links" aria-label="Main navigation">
             {navLinks.map((link) => (
               <NavLink
                 key={link.to}
                 to={link.to}
-                onClick={closeMenu}
+                end={link.to === "/"}
                 className={({ isActive }) =>
-                  `rounded-lg px-3 py-3 text-sm font-semibold transition-colors ${
-                    isActive
-                      ? "bg-primary-light text-primary"
-                      : "text-text hover:bg-background"
-                  }`
+                  `wl-nav-link ${isActive ? "active" : ""}`
                 }
               >
                 {link.label}
@@ -83,27 +79,81 @@ function PublicNavbar() {
             ))}
           </nav>
 
-          <div className="mt-4 flex flex-col gap-3 border-t border-border pt-4">
-            <Link
-              to="/login"
-              onClick={closeMenu}
-              className="rounded-lg px-3 py-2 text-sm font-semibold text-text"
-            >
-              Login
+          {/* Desktop Actions */}
+          <div className="wl-nav-actions wl-navbar-desktop-actions">
+            <Link to="/login" className="wl-signin">
+              Sign In
             </Link>
 
-            <AppButton
-              fullWidth
-              onPress={() => {
-                closeMenu();
-                window.location.assign("/register");
-              }}
-            >
+            <button type="button" onClick={goToRegister} className="wl-cta">
               Get Started
-            </AppButton>
+              <FiArrowUpRight size={16} />
+            </button>
           </div>
+
+          {/* Mobile Toggle */}
+          <button
+            type="button"
+            className="wl-mobile-toggle"
+            onClick={() => setMenuOpen((previous) => !previous)}
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+          >
+            {menuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
+          </button>
         </div>
-      )}
+
+        {/* Mobile Menu */}
+        <AnimatePresence>
+          {menuOpen && (
+            <motion.div
+              className="wl-mobile-panel"
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2 }}
+            >
+              <nav className="wl-mobile-links">
+                {navLinks.map((link, index) => (
+                  <motion.div
+                    key={link.to}
+                    initial={{ opacity: 0, x: -8 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: index * 0.04 }}
+                  >
+                    <NavLink
+                      to={link.to}
+                      end={link.to === "/"}
+                      onClick={closeMenu}
+                      className={({ isActive }) =>
+                        `wl-mobile-link ${isActive ? "active" : ""}`
+                      }
+                    >
+                      {link.label}
+                      <FiChevronRight size={17} />
+                    </NavLink>
+                  </motion.div>
+                ))}
+              </nav>
+
+              <div className="wl-mobile-actions">
+                <Link
+                  to="/login"
+                  onClick={closeMenu}
+                  className="flex min-h-12 items-center justify-center rounded-full border border-border text-sm font-bold text-heading"
+                >
+                  Sign In
+                </Link>
+
+                <button type="button" onClick={goToRegister} className="wl-cta">
+                  Get Started
+                  <FiArrowUpRight size={16} />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </header>
   );
 }

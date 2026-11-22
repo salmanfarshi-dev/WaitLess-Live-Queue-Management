@@ -1,0 +1,10 @@
+
+/* ========================================
+   WAITLESS GLOBAL RESPONSIVE STYLES
+======================================== */
+
+@media (max-width: 640px) {
+  .wl-container {
+    width: min(calc(100% - 2rem), var(--wl-container-width));
+  }
+}

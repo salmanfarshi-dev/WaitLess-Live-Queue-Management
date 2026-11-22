@@ -1,0 +1,178 @@
+/* WaitLess design tokens */
+:root {
+  /* Brand */
+  --wl-primary: #2563eb;
+  --wl-primary-dark: #1d4ed8;
+  --wl-primary-light: #e0f2fe;
+
+  --wl-secondary: #0d9488;
+  --wl-secondary-dark: #0f766e;
+  --wl-secondary-light: #f0fdfa;
+
+  /* Neutral */
+  --wl-navy: #102a43;
+  --wl-background: #f8fafc;
+  --wl-surface: #ffffff;
+
+  --wl-text: #334155;
+  --wl-heading: #102a43;
+  --wl-muted: #64748b;
+  --wl-border: #e2e8f0;
+  --wl-scrollbar: #cbd5e1;
+
+  /* Queue Status Colors */
+  --wl-status-waiting: #2563eb;
+  --wl-status-called: #d97706;
+  --wl-status-serving: #0d9488;
+  --wl-status-completed: #16a34a;
+  --wl-status-skipped: #ea580c;
+  --wl-status-cancelled: #dc2626;
+  --wl-status-no-show: #64748b;
+
+  /* Queue Status Backgrounds */
+  --wl-status-waiting-bg: #e0f2fe;
+  --wl-status-called-bg: #fef3c7;
+  --wl-status-serving-bg: #f0fdfa;
+  --wl-status-completed-bg: #dcfce7;
+  --wl-status-skipped-bg: #ffedd5;
+  --wl-status-cancelled-bg: #fef2f2;
+  --wl-status-no-show-bg: #f1f5f9;
+  --wl-status-default-bg: #f8fafc;
+
+  /* Typography */
+  --wl-font-english: "Plus Jakarta Sans", sans-serif;
+  --wl-font-bangla: "Hind Siliguri", sans-serif;
+
+  --wl-text-xs: 0.75rem;
+  --wl-text-sm: 0.875rem;
+  --wl-text-base: 1rem;
+  --wl-text-lg: 1.125rem;
+  --wl-text-xl: 1.25rem;
+  --wl-text-2xl: 1.5rem;
+  --wl-text-3xl: 1.875rem;
+  --wl-text-4xl: 2.25rem;
+  --wl-text-5xl: 3rem;
+
+  /* Font Weights */
+  --wl-weight-regular: 400;
+  --wl-weight-medium: 500;
+  --wl-weight-semibold: 600;
+  --wl-weight-bold: 700;
+  --wl-weight-extrabold: 800;
+
+  /* Spacing */
+  --wl-space-1: 0.25rem;
+  --wl-space-2: 0.5rem;
+  --wl-space-3: 0.75rem;
+  --wl-space-4: 1rem;
+  --wl-space-5: 1.25rem;
+  --wl-space-6: 1.5rem;
+  --wl-space-8: 2rem;
+  --wl-space-10: 2.5rem;
+  --wl-space-12: 3rem;
+  --wl-space-16: 4rem;
+  --wl-space-20: 5rem;
+  --wl-space-24: 6rem;
+
+  /* Border Radius */
+  --wl-radius-sm: 8px;
+  --wl-radius-md: 12px;
+  --wl-radius-lg: 16px;
+  --wl-radius-xl: 24px;
+  --wl-radius-full: 9999px;
+  --wl-radius-pill: var(--wl-radius-full);
+
+  /* Shadows */
+  --wl-shadow-sm: 0 1px 2px rgb(16 42 67 / 5%);
+  --wl-shadow-md: 0 4px 12px rgb(16 42 67 / 8%);
+  --wl-shadow-lg: 0 10px 30px rgb(16 42 67 / 10%);
+  --wl-shadow-xl: 0 20px 50px rgb(16 42 67 / 12%);
+
+  /* Transitions */
+  --wl-transition-fast: 150ms ease;
+  --wl-transition-normal: 250ms ease;
+  --wl-transition-slow: 400ms ease;
+
+  /* Layout */
+  --wl-container-width: 1280px;
+  --wl-header-height: 72px;
+
+  /* Z-index */
+  --wl-z-dropdown: 1000;
+  --wl-z-sticky: 1020;
+  --wl-z-modal: 1050;
+  --wl-z-toast: 1100;
+
+  /* HeroUI Semantic Theme Mapping */
+  --accent: var(--wl-primary);
+  --accent-foreground: #ffffff;
+
+  --background: var(--wl-background);
+  --foreground: var(--wl-heading);
+
+  --surface: var(--wl-surface);
+  --surface-foreground: var(--wl-text);
+
+  --muted: #f1f5f9;
+  --muted-foreground: var(--wl-muted);
+
+  --border: var(--wl-border);
+  --focus: var(--wl-primary);
+}
+
+/* Tailwind CSS v4 theme mapping */
+@theme inline {
+  /* Brand Colors */
+  --color-primary: var(--wl-primary);
+  --color-primary-dark: var(--wl-primary-dark);
+  --color-primary-light: var(--wl-primary-light);
+
+  --color-secondary: var(--wl-secondary);
+  --color-secondary-dark: var(--wl-secondary-dark);
+  --color-secondary-light: var(--wl-secondary-light);
+
+  /* Neutral Colors */
+  --color-navy: var(--wl-navy);
+  --color-background: var(--wl-background);
+  --color-surface: var(--wl-surface);
+
+  --color-text: var(--wl-text);
+  --color-heading: var(--wl-heading);
+  --color-muted: var(--wl-muted);
+  --color-border: var(--wl-border);
+
+  /* Status Colors */
+  --color-waiting: var(--wl-status-waiting);
+  --color-called: var(--wl-status-called);
+  --color-serving: var(--wl-status-serving);
+  --color-completed: var(--wl-status-completed);
+  --color-skipped: var(--wl-status-skipped);
+  --color-cancelled: var(--wl-status-cancelled);
+  --color-no-show: var(--wl-status-no-show);
+
+  --color-waiting-bg: var(--wl-status-waiting-bg);
+  --color-called-bg: var(--wl-status-called-bg);
+  --color-serving-bg: var(--wl-status-serving-bg);
+  --color-completed-bg: var(--wl-status-completed-bg);
+  --color-skipped-bg: var(--wl-status-skipped-bg);
+  --color-cancelled-bg: var(--wl-status-cancelled-bg);
+  --color-no-show-bg: var(--wl-status-no-show-bg);
+
+  /* Fonts */
+  --font-sans: var(--wl-font-english);
+  --font-english: var(--wl-font-english);
+  --font-bangla: var(--wl-font-bangla);
+
+  /* Radius */
+  --radius-sm: var(--wl-radius-sm);
+  --radius-md: var(--wl-radius-md);
+  --radius-lg: var(--wl-radius-lg);
+  --radius-xl: var(--wl-radius-xl);
+  --radius-full: var(--wl-radius-full);
+
+  /* Shadows */
+  --shadow-soft: var(--wl-shadow-sm);
+  --shadow-card: var(--wl-shadow-md);
+  --shadow-elevated: var(--wl-shadow-lg);
+  --shadow-floating: var(--wl-shadow-xl);
+}

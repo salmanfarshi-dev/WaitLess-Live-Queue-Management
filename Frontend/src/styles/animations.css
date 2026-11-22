@@ -1,0 +1,82 @@
+/* ========================================
+   WAITLESS ANIMATIONS
+======================================== */
+
+@keyframes wl-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes wl-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wl-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wl-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes wl-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes wl-shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Reusable Animation Classes */
+
+.wl-animate-fade-in {
+  animation: wl-fade-in var(--wl-transition-slow) both;
+}
+
+.wl-animate-slide-up {
+  animation: wl-slide-up 500ms ease both;
+}
+
+.wl-animate-slide-down {
+  animation: wl-slide-down var(--wl-transition-slow) both;
+}
+
+.wl-animate-pulse {
+  animation: wl-pulse 1.5s ease-in-out infinite;
+}
+
+.wl-animate-spin {
+  animation: wl-spin 1s linear infinite;
+}

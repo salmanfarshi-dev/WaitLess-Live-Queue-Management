@@ -1,0 +1,157 @@
+/* ========================================
+   WAITLESS GLOBAL STYLES
+======================================== */
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    box-sizing: border-box;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: var(--wl-header-height);
+  }
+
+  body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    background-color: var(--wl-background);
+    color: var(--wl-text);
+    font-family: var(--wl-font-english);
+    font-size: var(--wl-text-base);
+    font-weight: var(--wl-weight-regular);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  :lang(bn) {
+    font-family: var(--wl-font-bangla);
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  img,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  img {
+    height: auto;
+  }
+
+  /* Base Typography
+     Font sizes are controlled by Tailwind utilities. */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    color: var(--wl-heading);
+    font-family: var(--wl-font-english);
+    font-weight: var(--wl-weight-bold);
+    line-height: 1.25;
+  }
+
+  p {
+    margin: 0;
+    color: var(--wl-text);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--wl-primary);
+    outline-offset: 3px;
+  }
+}
+
+/* ========================================
+   REUSABLE GLOBAL UTILITIES
+======================================== */
+
+.wl-container {
+  width: min(calc(100% - var(--wl-space-8)), var(--wl-container-width));
+  margin-inline: auto;
+}
+
+.wl-card {
+  border: 1px solid var(--wl-border);
+  border-radius: var(--wl-radius-lg);
+  background-color: var(--wl-surface);
+  box-shadow: var(--wl-shadow-sm);
+  transition: var(--wl-transition-normal);
+}
+
+.wl-card:hover {
+  box-shadow: var(--wl-shadow-md);
+}
+
+.wl-transition {
+  transition: var(--wl-transition-normal);
+}
+
+.wl-focus-ring:focus-visible {
+  outline: 3px solid var(--wl-primary-light);
+  outline-offset: 3px;
+}
+
+/* ========================================
+   SCROLLBAR
+======================================== */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: var(--wl-background);
+}
+
+::-webkit-scrollbar-thumb {
+  border-radius: var(--wl-radius-full);
+  background-color: var(--wl-scrollbar);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--wl-muted);
+}
+
+/* ========================================
+   ACCESSIBILITY
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

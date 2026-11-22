@@ -9,7 +9,10 @@ function TableLoader({ rows = 5, columns = 4 }) {
     >
       {/* Table Header */}
       <div className="overflow-x-auto">
-        <div className="flex min-w-[420px] gap-4 border-b border-border bg-background px-4 py-4 sm:px-5">
+        <div
+          className="flex min-w-[420px] gap-4 border-b bg-background px-4 py-4 sm:px-5"
+          style={{ borderColor: "var(--wl-border)" }}
+        >
           {Array.from({ length: columns }).map((_, index) => (
             <div key={index} className="min-w-0 flex-1">
               <div
@@ -21,11 +24,12 @@ function TableLoader({ rows = 5, columns = 4 }) {
         </div>
 
         {/* Table Rows */}
-        <div className="min-w-[420px] divide-y divide-border">
+        <div className="min-w-[420px]">
           {Array.from({ length: rows }).map((_, rowIndex) => (
             <div
               key={rowIndex}
-              className="flex items-center gap-4 px-4 py-5 sm:px-5"
+              className="flex items-center gap-4 border-b px-4 py-5 sm:px-5"
+              style={{ borderColor: "var(--wl-border)" }}
             >
               {Array.from({ length: columns }).map((_, colIndex) => (
                 <div key={colIndex} className="min-w-0 flex-1">

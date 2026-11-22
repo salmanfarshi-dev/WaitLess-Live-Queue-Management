@@ -1,4 +1,3 @@
-
 import { motion } from "motion/react";
 import { FiLoader } from "react-icons/fi";
 
@@ -17,7 +16,9 @@ function ButtonLoader({ message = "Please wait...", size = 18 }) {
           repeat: Infinity,
           ease: "linear",
         }}
-        style={{ color: "var(--wl-primary)" }}
+        style={{
+          color: "var(--wl-primary)",
+        }}
       >
         <FiLoader size={size} />
       </motion.span>

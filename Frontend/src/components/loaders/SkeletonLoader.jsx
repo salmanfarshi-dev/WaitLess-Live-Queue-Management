@@ -1,4 +1,3 @@
-
 import { motion } from "motion/react";
 
 function Skeleton({ className = "" }) {
@@ -54,7 +53,10 @@ export function TableSkeleton({ rows = 5 }) {
           {Array.from({ length: rows }).map((_, index) => (
             <div
               key={index}
-              className="flex items-center gap-4 border-t border-border py-4"
+              className="flex items-center gap-4 border-t py-4"
+              style={{
+                borderColor: "var(--wl-border)",
+              }}
             >
               <Skeleton className="h-9 w-9 shrink-0 rounded-full" />
 
