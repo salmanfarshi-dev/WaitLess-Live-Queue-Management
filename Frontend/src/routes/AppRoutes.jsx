@@ -9,6 +9,10 @@ import GuestRoute from "./GuestRoute";
 
 import PlaceholderPage from "../components/common/PlaceholderPage";
 import Home from "../pages/public/Home";
+import Login from "../pages/auth/Login";
+import Register from "../pages/auth/Register";
+import ForgotPassword from "../pages/auth/ForgotPassword";
+import ResetPassword from "../pages/auth/ResetPassword";
 
 function AppRoutes() {
   return (
@@ -41,17 +45,10 @@ function AppRoutes() {
       {/* Authentication */}
       <Route element={<GuestRoute />}>
         <Route element={<AuthLayout />}>
-          <Route path="/login" element={<PlaceholderPage title="Login" />} />
-
-          <Route
-            path="/register"
-            element={<PlaceholderPage title="Register" />}
-          />
-
-          <Route
-            path="/forgot-password"
-            element={<PlaceholderPage title="Forgot Password" />}
-          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:token" element={<ResetPassword />} />
         </Route>
       </Route>
 

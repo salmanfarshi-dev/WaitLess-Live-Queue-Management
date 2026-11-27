@@ -1,6 +1,8 @@
-
 const express = require("express");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+
+const authRoutes = require("./modules/auth/authRoutes");
 
 const app = express();
 
@@ -15,6 +17,7 @@ app.use(
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 // Health Check Route
 app.get("/", (req, res) => {
@@ -23,5 +26,8 @@ app.get("/", (req, res) => {
     message: "WaitLess Backend is running!",
   });
 });
+
+// Authentication Routes
+app.use("/api/v1/auth", authRoutes);
 
 module.exports = app;

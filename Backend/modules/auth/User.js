@@ -1,5 +1,5 @@
-
 const mongoose = require("mongoose");
+const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema(
   {
@@ -26,12 +26,7 @@ const userSchema = new mongoose.Schema(
 
     role: {
       type: String,
-      enum: [
-        "super_admin",
-        "hospital_admin",
-        "receptionist",
-        "doctor",
-      ],
+      enum: ["super_admin", "hospital_admin", "receptionist", "doctor"],
       default: "hospital_admin",
       required: true,
     },
@@ -59,8 +54,21 @@ const userSchema = new mongoose.Schema(
   },
   {
     timestamps: true,
-  }
+  },
 );
+
+// Hash password before saving
+userSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+
+  const salt = await bcrypt.genSalt(12);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Compare entered password with hashed password
+userSchema.methods.comparePassword = async function (enteredPassword) {
+  return bcrypt.compare(enteredPassword, this.password);
+};
 
 const User = mongoose.model("User", userSchema);
 
