@@ -18,12 +18,11 @@ function Login() {
 
   const { loading, error } = useSelector((state) => state.auth);
 
-  const registrationSuccess =
-    location.state?.registrationSuccess === true;
-
+  const emailVerified = location.state?.emailVerified === true;
   const registeredEmail = location.state?.registeredEmail || "";
 
   const [showPassword, setShowPassword] = useState(false);
+  const [emailNotVerified, setEmailNotVerified] = useState(false);
 
   const [formData, setFormData] = useState({
     email: registeredEmail,
@@ -37,10 +36,15 @@ function Login() {
       ...previous,
       [name]: value,
     }));
+
+    if (name === "email") {
+      setEmailNotVerified(false);
+    }
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setEmailNotVerified(false);
 
     try {
       const user = await dispatch(login(formData)).unwrap();
@@ -57,8 +61,15 @@ function Login() {
       navigate(location.state?.from?.pathname || destination, {
         replace: true,
       });
-    } catch {
-      // Login error is handled by Redux.
+    } catch (loginError) {
+      const errorMessage =
+        typeof loginError === "string"
+          ? loginError
+          : loginError?.message || "";
+
+      if (errorMessage.toLowerCase().includes("verify")) {
+        setEmailNotVerified(true);
+      }
     }
   };
 
@@ -78,13 +89,12 @@ function Login() {
         </p>
       </div>
 
-      {registrationSuccess && (
+      {emailVerified && (
         <div
           role="status"
           className="mb-5 rounded-xl border border-secondary/20 bg-secondary-light px-4 py-3 text-sm leading-6 text-secondary-dark"
         >
-          Your account has been created successfully!
-          Please sign in with your registered email and password.
+          Your email has been verified successfully! You can now sign in.
         </div>
       )}
 
@@ -168,6 +178,16 @@ function Login() {
           >
             {error}
           </div>
+        )}
+
+        {emailNotVerified && (
+          <Link
+            to="/verify-email"
+            state={{ email: formData.email }}
+            className="block text-center text-sm font-semibold text-primary hover:underline"
+          >
+            Resend verification email
+          </Link>
         )}
 
         <button

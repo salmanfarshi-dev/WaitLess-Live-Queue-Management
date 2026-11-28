@@ -62,15 +62,30 @@ function Register() {
         })
       ).unwrap();
 
-      navigate("/login", {
+      navigate("/verify-email", {
         replace: true,
         state: {
+          email: formData.email.trim().toLowerCase(),
           registrationSuccess: true,
-          registeredEmail: formData.email.trim().toLowerCase(),
         },
       });
-    } catch {
+    } catch (registrationError) {
       // Redux handles registration errors.
+      // If email delivery fails after account creation,
+      // the user can resend verification from the error page.
+      if (
+        String(registrationError)
+          .toLowerCase()
+          .includes("account was created")
+      ) {
+        navigate("/verify-email", {
+          replace: true,
+          state: {
+            email: formData.email.trim().toLowerCase(),
+            registrationSuccess: true,
+          },
+        });
+      }
     }
   };
 

@@ -13,6 +13,20 @@ export const loginUser = async (credentials) => {
   return response.data;
 };
 
+// Verify Email
+export const verifyEmail = async (token) => {
+  const response = await api.get(`/auth/verify-email/${token}`);
+  return response.data;
+};
+
+// Resend Verification Email
+export const resendVerificationEmail = async (email) => {
+  const response = await api.post("/auth/resend-verification", {
+    email,
+  });
+  return response.data;
+};
+
 // Get Logged-in User
 export const getCurrentUser = async () => {
   const response = await api.get("/auth/me");

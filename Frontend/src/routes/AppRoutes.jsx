@@ -1,3 +1,4 @@
+
 import { Routes, Route } from "react-router-dom";
 
 import PublicLayout from "../layouts/PublicLayout";
@@ -6,13 +7,14 @@ import DashboardLayout from "../layouts/DashboardLayout";
 
 import ProtectedRoute from "./ProtectedRoute";
 import GuestRoute from "./GuestRoute";
-
+import VerifyEmail from "../pages/auth/VerifyEmail";
 import PlaceholderPage from "../components/common/PlaceholderPage";
 import Home from "../pages/public/Home";
 import Login from "../pages/auth/Login";
 import Register from "../pages/auth/Register";
 import ForgotPassword from "../pages/auth/ForgotPassword";
 import ResetPassword from "../pages/auth/ResetPassword";
+
 
 function AppRoutes() {
   return (
@@ -49,6 +51,9 @@ function AppRoutes() {
           <Route path="/register" element={<Register />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/reset-password/:token" element={<ResetPassword />} />
+          <Route path="/verify-email/:token" element={<VerifyEmail />} />
+          <Route path="/verify-email" element={<VerifyEmail />} />
+
         </Route>
       </Route>
 

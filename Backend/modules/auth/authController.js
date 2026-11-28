@@ -1,4 +1,6 @@
 
+const EmailVerificationToken = require("./EmailVerificationToken");
+
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
 const User = require("./User");
@@ -19,6 +21,7 @@ const {
 const sendEmail = require("../../utils/sendEmail");
 
 // Register
+
 
 const register = async (req, res) => {
   try {
@@ -65,8 +68,6 @@ const register = async (req, res) => {
       password,
     });
 
-    // Registration does not create an authenticated session.
-    // Remove any stale authentication cookies from this browser.
     const existingRefreshToken = req.cookies?.waitless_refresh_token;
 
     if (existingRefreshToken) {
@@ -82,9 +83,78 @@ const register = async (req, res) => {
     res.clearCookie("waitless_access_token", cookieOptions);
     res.clearCookie("waitless_refresh_token", cookieOptions);
 
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
+    const tokenHash = crypto
+      .createHash("sha256")
+      .update(verificationToken)
+      .digest("hex");
+
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    await EmailVerificationToken.create({
+      userId: user._id,
+      tokenHash,
+      expiresAt,
+    });
+
+    const frontendUrl = process.env.FRONTEND_URL;
+
+    if (!frontendUrl) {
+      throw new Error("FRONTEND_URL is not configured.");
+    }
+
+    const verificationUrl = `${frontendUrl.replace(/\/$/, "")}/verify-email/${verificationToken}`;
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "Verify Your WaitLess Email Address",
+        textContent: `Hello ${user.name},
+
+Thank you for registering with WaitLess.
+
+Please open the following link to verify your email address:
+
+${verificationUrl}
+
+This link expires in 24 hours.
+
+If you did not create this account, please ignore this email.`,
+        htmlContent: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; color: #334155;">
+            <h2 style="color: #102a43;">Verify Your Email Address</h2>
+            <p>Hello ${user.name},</p>
+            <p>Thank you for creating your WaitLess account.</p>
+            <p>Please verify your email address to activate your account.</p>
+            <p style="margin: 30px 0;">
+              <a href="${verificationUrl}" style="background: #2563eb; color: #ffffff; padding: 14px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                Verify Email Address
+              </a>
+            </p>
+            <p>This link expires in <strong>24 hours</strong>.</p>
+            <p>If you did not create this account, please ignore this email.</p>
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 25px 0;" />
+            <p style="font-size: 12px; color: #64748b;">WaitLess — Your Time Matters.</p>
+          </div>
+        `,
+      });
+    } catch (emailError) {
+      await EmailVerificationToken.deleteOne({ tokenHash });
+
+      console.error("Verification Email Error:", emailError);
+
+      return res.status(503).json({
+        success: false,
+        message:
+          "Your account was created, but the verification email could not be sent. Please use the resend verification option.",
+        email: user.email,
+      });
+    }
+
     return res.status(201).json({
       success: true,
-      message: "Registration successful. Please login to continue.",
+      message: "Registration successful. Please verify your email.",
       user: {
         id: user._id,
         name: user.name,
@@ -105,7 +175,9 @@ const register = async (req, res) => {
 };
 
 
+
 // Login
+
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -132,6 +204,15 @@ const login = async (req, res) => {
       return res.status(403).json({
         success: false,
         message: "Your account is inactive.",
+      });
+    }
+
+    if (!user.isEmailVerified) {
+      return res.status(403).json({
+        success: false,
+        message: "Please verify your email address before logging in.",
+        code: "EMAIL_NOT_VERIFIED",
+        email: user.email,
       });
     }
 
@@ -163,6 +244,7 @@ const login = async (req, res) => {
   }
 };
 
+
 // Get Logged-in User
 const getMe = async (req, res) => {
   try {
@@ -193,6 +275,7 @@ const getMe = async (req, res) => {
 };
 
 // Refresh Access Token
+
 const refreshAccessToken = async (req, res) => {
   try {
     const refreshToken = req.cookies?.waitless_refresh_token;
@@ -229,6 +312,28 @@ const refreshAccessToken = async (req, res) => {
       });
     }
 
+    if (!user.isEmailVerified) {
+      await revokeRefreshToken(refreshToken);
+
+      res.clearCookie("waitless_access_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+      });
+
+      res.clearCookie("waitless_refresh_token", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+      });
+
+      return res.status(403).json({
+        success: false,
+        message: "Please verify your email address.",
+        code: "EMAIL_NOT_VERIFIED",
+      });
+    }
+
     await revokeRefreshToken(refreshToken);
 
     const newAccessToken = generateAccessToken(user._id);
@@ -250,6 +355,7 @@ const refreshAccessToken = async (req, res) => {
     });
   }
 };
+
 
 // Forgot Password
 const forgotPassword = async (req, res) => {
@@ -467,6 +573,189 @@ const logout = async (req, res) => {
   }
 };
 
+
+const verifyEmail = async (req, res) => {
+  try {
+    const { token } = req.params;
+
+    if (!token) {
+      return res.status(400).json({
+        success: false,
+        message: "Verification token is required.",
+      });
+    }
+
+    const tokenHash = crypto
+      .createHash("sha256")
+      .update(token)
+      .digest("hex");
+
+    const verificationRecord = await EmailVerificationToken.findOne({
+      tokenHash,
+    });
+
+    if (!verificationRecord) {
+      return res.status(400).json({
+        success: false,
+        message: "Verification link is invalid or expired.",
+      });
+    }
+
+    const user = await User.findById(verificationRecord.userId);
+
+    if (!user || !user.isActive) {
+      return res.status(400).json({
+        success: false,
+        message: "Unable to verify this account.",
+      });
+    }
+
+    if (user.isEmailVerified) {
+      return res.status(200).json({
+        success: true,
+        message: "Your email address is already verified.",
+      });
+    }
+
+    if (
+      verificationRecord.usedAt ||
+      verificationRecord.expiresAt <= new Date()
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Verification link is invalid or expired. Please request a new one.",
+      });
+    }
+
+    user.isEmailVerified = true;
+    await user.save();
+
+    verificationRecord.usedAt = new Date();
+    await verificationRecord.save();
+
+    return res.status(200).json({
+      success: true,
+      message: "Email verified successfully. You can now log in.",
+    });
+  } catch (error) {
+    console.error("Verify Email Error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Email verification failed. Please try again.",
+    });
+  }
+};
+
+const resendVerificationEmail = async (req, res) => {
+  const successMessage =
+    "If an unverified account exists with this email, a verification link will be sent.";
+
+  try {
+    const { email } = req.body;
+
+    if (!email || !email.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Email address is required.",
+      });
+    }
+
+    const normalizedEmail = email.toLowerCase().trim();
+
+    const user = await User.findOne({
+      email: normalizedEmail,
+      isActive: true,
+    });
+
+    // Do not reveal whether an account exists.
+    if (!user || user.isEmailVerified) {
+      return res.status(200).json({
+        success: true,
+        message: successMessage,
+      });
+    }
+
+    await EmailVerificationToken.deleteMany({
+      userId: user._id,
+      usedAt: null,
+    });
+
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+
+    const tokenHash = crypto
+      .createHash("sha256")
+      .update(verificationToken)
+      .digest("hex");
+
+    const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+
+    await EmailVerificationToken.create({
+      userId: user._id,
+      tokenHash,
+      expiresAt,
+    });
+
+    const frontendUrl = process.env.FRONTEND_URL;
+
+    if (!frontendUrl) {
+      throw new Error("FRONTEND_URL is not configured.");
+    }
+
+    const verificationUrl = `${frontendUrl.replace(/\/$/, "")}/verify-email/${verificationToken}`;
+
+    try {
+      await sendEmail({
+        to: user.email,
+        subject: "Verify Your WaitLess Email Address",
+        textContent: `Hello ${user.name},
+
+Please verify your WaitLess email address using this link:
+
+${verificationUrl}
+
+This link expires in 24 hours.
+
+If you did not request this email, please ignore it.`,
+        htmlContent: `
+          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 30px; color: #334155;">
+            <h2 style="color: #102a43;">Verify Your Email Address</h2>
+            <p>Hello ${user.name},</p>
+            <p>Please verify your email address to activate your WaitLess account.</p>
+            <p style="margin: 30px 0;">
+              <a href="${verificationUrl}" style="background: #2563eb; color: #ffffff; padding: 14px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
+                Verify Email Address
+              </a>
+            </p>
+            <p>This link expires in <strong>24 hours</strong>.</p>
+            <p>If you did not request this email, please ignore it.</p>
+            <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 25px 0;" />
+            <p style="font-size: 12px; color: #64748b;">WaitLess — Your Time Matters.</p>
+          </div>
+        `,
+      });
+    } catch (emailError) {
+      await EmailVerificationToken.deleteOne({ tokenHash });
+      throw emailError;
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: successMessage,
+    });
+  } catch (error) {
+    console.error("Resend Verification Email Error:", error);
+
+    // Keep the response generic to avoid revealing account existence.
+    return res.status(200).json({
+      success: true,
+      message: successMessage,
+    });
+  }
+};
+
+
+
 module.exports = {
   register,
   login,
@@ -475,4 +764,6 @@ module.exports = {
   forgotPassword,
   resetPassword,
   logout,
+  verifyEmail,
+  resendVerificationEmail,
 };
